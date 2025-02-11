@@ -1,25 +1,25 @@
 from typing import Final
 
-import os
+import settings
 import discord
 from discord import Intents,Client,Message
 from discord.ext import commands, tasks
 from discord import app_commands
-from dotenv import load_dotenv
 from datetime import datetime, timedelta
 
 
 from get_prayer_time import get_prayer_time
 from get_quran_verse import get_quran_verse
 
-#**Load TOKEN
-load_dotenv()
-TOKEN: Final[str]= os.getenv('DISCORD_TOKEN')
+
+
 
 #BOT SETUP
+logger= settings.logging.getLogger("bot")
+
 intents: Intents = Intents.default()
 intents.message_content= True
-client : Client = Client(intents=intents)
+
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
@@ -34,6 +34,15 @@ async def on_ready() ->None:
     await bot.tree.sync()
     #prayer_time_notification.start()                   #! Disabled for now ...
     send_quran.start()
+
+@bot.command(
+    aliases=['p'],
+    help="this is help",
+    description="this is description",
+    brief="this is a ping command !"
+)
+async def ping(ctx):
+    await ctx.send("pong")
 
 #todo : i need to fix this , not working well ...
 
@@ -120,7 +129,9 @@ async def prayertime(ctx):
 
 #Main entry
 def main() -> None:
-    bot.run(token=TOKEN)
+    
+    bot.run(settings.TOKEN,root_logger=True)
+    logger.info(f"User:{bot.user}(ID ={bot.user.id})")
 
 if __name__== '__main__':
     main()
