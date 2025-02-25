@@ -48,14 +48,14 @@ async def on_command_error(ctx, error):
 
 @bot.command(
     aliases=['p'],
-    help="this is help",
+    help="this is help",                       #Probably should add real "Help" prompts as well
     description="this is description",
     brief="this is a ping command !"
 )
 async def ping(ctx):
     await ctx.send("pong")
 
-#todo : i need to fix this , not working well ...
+#todo : Keep underwatch , might fail 
 
 @tasks.loop(minutes=1)  
 async def prayer_time_notification():
@@ -81,15 +81,15 @@ async def prayer_time_notification():
                 await channel.send(f"@everyone ({prayer})حان الأن موعد صلاة الـ ")
             
             if prayer == "Imsak":
-                await channel.send(file=discord.File("resources/zaki.mp4"))
+                await channel.send(file=discord.File("resources/zaki.mp4")) #* about that ... might consider it later
                 
             if prayer == "Maghrib":
                 maghrib_time = datetime.strptime(time, '%H:%M')
                 ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
                 
                 if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
-                        await channel.send("تم تعبئة الكرشة بنجاح")
-                        await channel.send(file=discord.File("resources/zaki.jpg"))
+                        await channel.send("تم تعبئة الكرشة بنجاح")                       
+                        await channel.send(file=discord.File("resources/zaki.jpg"))                #*Should add 30 diff pics , Each pic for each day , maybe ...
     else:
         print(f"❌ Error: Channel {channel} is not a TextChannel!")
 
@@ -97,7 +97,7 @@ async def prayer_time_notification():
 
 #*Random Quran Verse
 
-@tasks.loop(hours=4) #todo: change to houres = 2 later , "mins" for test
+@tasks.loop(hours=4) #todo Currently 4 hours , might change 
 async def send_quran():
     channel = bot.get_channel(1337175557271715920) 
 
