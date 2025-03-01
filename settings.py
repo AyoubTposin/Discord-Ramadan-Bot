@@ -11,6 +11,15 @@ TOKEN: Final[str]= os.getenv('DISCORD_TOKEN')
 BASE_DIR = pathlib.Path(__file__).parent
 CMD_DIR = BASE_DIR / "cmds"
 COGS_DIR = BASE_DIR / "cogs"
+LOG_DIR = "logs"
+LOG_FILE = os.path.join(LOG_DIR, "infos.log")
+
+# Ensure the logs directory exists
+os.makedirs(LOG_DIR, exist_ok=True)
+# Ensure the log file exists
+if not os.path.exists(LOG_FILE):
+    with open(LOG_FILE, "w") as f:
+        pass  # Creates an empty file
 
 LOGGING_CONFIG = {
     "version": 1,
