@@ -99,7 +99,7 @@ async def prayer_time_notification():
 
 @tasks.loop(hours=4) #todo Currently 4 hours , might change 
 async def send_quran():
-    channel = bot.get_channel(1337175557271715920) 
+    channel = bot.get_channel(1344067206346182668) 
 
     if isinstance(channel, discord.TextChannel):
         quran_verse = get_quran_verse()
