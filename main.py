@@ -32,7 +32,9 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 async def on_ready() ->None:
     print(f'{bot.user} is now running!')
     await bot.tree.sync()
-    prayer_time_notification.start()                   #*Activated : still checking tho ...
+    if not prayer_time_notification.is_running():
+        print("🔄 Starting prayer time loop...")
+        prayer_time_notification.start()                   #*Activated : still checking tho ...
     send_quran.start()
     
 @bot.event
@@ -65,8 +67,9 @@ async def prayer_time_notification():
     
     try:
         timings = get_prayer_time()
+        print("📅 Prayer times fetched:", timings)  # Debugging line
     except Exception as e:
-        print(f"Failed to fetch prayer times: {e}")
+        print(f"❌Failed to fetch prayer times: {e}")
         return
 
     channel = bot.get_channel(1344067206346182668) 
@@ -78,6 +81,8 @@ async def prayer_time_notification():
     for prayer, time in timings.items():
         try:
             prayer_time = datetime.strptime(time, '%H:%M').time()
+            print(f"⏰ Checking {prayer}: {prayer_time} vs {now}")
+
         except ValueError:
             print(f"Invalid time format for {prayer}: {time}")
             continue
@@ -85,7 +90,8 @@ async def prayer_time_notification():
         # Check if prayer time matches and it hasn't been sent yet
         if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
             if prayer not in sent_prayers:
-                await channel.send(f"@everyone ({prayer}) حان الأن موعد صلاة الـ ")
+                print(f"✅ Sending notification for {prayer}!")
+                await channel.send(f"@everyone 🕌 ({prayer}) حان الأن موعد الصلاة")
                 sent_prayers.add(prayer)  # Mark as sent
 
                 #Imsak
