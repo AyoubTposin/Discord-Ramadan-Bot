@@ -63,6 +63,7 @@ sent_prayers = set()
 
 @tasks.loop(minutes=1)  
 async def prayer_time_notification():
+    now = (datetime.now() + timedelta(hours=1)).time() # Added 1 hour due to hosting error (UTC +1)
     now = datetime.now().replace(second=0, microsecond=0).time()
     
     try:
