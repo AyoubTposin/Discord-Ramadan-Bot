@@ -32,7 +32,7 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 async def on_ready() ->None:
     print(f'{bot.user} is now running!')
     await bot.tree.sync()
-    #prayer_time_notification.start()                   #! Disabled for now ...
+    prayer_time_notification.start()                   #*Activated : still checking tho ...
     send_quran.start()
     
 @bot.event
