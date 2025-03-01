@@ -148,38 +148,42 @@ async def ramadan(ctx):
 
 async def remind(ctx):
     try:
-        
-        timings = get_prayer_time()  
+        timings = get_prayer_time()
     except Exception as e:
         await ctx.send(f"⚠️ Error fetching prayer times: {e}")
         return
-    now = (datetime.now() + timedelta(hours=1)).time() # Added 1 hour due to hosting error (UTC +1)
 
-    # Extract Maghrib and Fajr times 
+    now = (datetime.now() + timedelta(hours=1)).time()  # Fix hosting UTC offset
+    now = now.replace(second=0, microsecond=0)  # Ignore seconds
+
+    # Extract Maghrib and Fajr times
     maghrib_time_str = timings.get("Maghrib", None)
     fajr_time_str = timings.get("Fajr", None)
-    
-    if not maghrib_time_str or not fajr_time_str: # Error handling
+
+    if not maghrib_time_str or not fajr_time_str:  # Error handling
         await ctx.send("❌ Could not find Maghrib or Fajr prayer times.")
         return
 
-    maghrib_time = datetime.strptime(maghrib_time_str, "%H:%M").replace(year=now.year, month=now.month, day=now.day)
-    fajr_time = datetime.strptime(fajr_time_str, "%H:%M").replace(year=now.year, month=now.month, day=now.day)
-    
-    if now > fajr_time:
+    # Convert prayer times to datetime objects
+    maghrib_time = datetime.strptime(maghrib_time_str, "%H:%M").replace(
+        year=datetime.now().year, month=datetime.now().month, day=datetime.now().day
+    )
+    fajr_time = datetime.strptime(fajr_time_str, "%H:%M").replace(
+        year=datetime.now().year, month=datetime.now().month, day=datetime.now().day
+    )
+
+    if now > fajr_time.time():  # If past Fajr, set Fajr for the next day
         fajr_time += timedelta(days=1)
 
-    
-    remaining_to_maghrib = maghrib_time - now if now < maghrib_time else timedelta(0)
-    remaining_to_fajr = fajr_time - now
+    remaining_to_maghrib = maghrib_time - datetime.combine(datetime.today(), now)
+    remaining_to_fajr = fajr_time - datetime.combine(datetime.today(), now)
 
-    
     def format_time(delta):
         hours, remainder = divmod(delta.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
         return f"{hours}h {minutes}m" if hours else f"{minutes}m"
 
-    maghrib_msg = f"🕌 **Maghrib:** {format_time(remaining_to_maghrib)} remaining" if remaining_to_maghrib else "🕌 **Maghrib:** Already passed!"
+    maghrib_msg = f"🕌 **Maghrib:** {format_time(remaining_to_maghrib)} remaining" if remaining_to_maghrib.total_seconds() > 0 else "🕌 **Maghrib:** Already passed!"
     fajr_msg = f"🌙 **Fajr:** {format_time(remaining_to_fajr)} remaining"
 
     # Send response
