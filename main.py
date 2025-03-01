@@ -57,9 +57,12 @@ async def ping(ctx):
 
 #todo : Keep underwatch , might fail 
 
+sent_prayers = set()
+
 @tasks.loop(minutes=1)  
 async def prayer_time_notification():
-    now= datetime.now().time()
+    now = datetime.now().replace(second=0, microsecond=0).time()
+    
     try:
         timings = get_prayer_time()
     except Exception as e:
@@ -68,30 +71,42 @@ async def prayer_time_notification():
 
     channel = bot.get_channel(1344067206346182668) 
 
-    if isinstance(channel, discord.TextChannel):
-
-        for prayer, time in timings.items():
-            try:
-                prayer_time = datetime.strptime(time, '%H:%M').time()  # Convert to time object
-            except ValueError:
-                print(f"Invalid time format for {prayer}: {time}")
-                continue
-    
-            if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
-                await channel.send(f"@everyone ({prayer})حان الأن موعد صلاة الـ ")
-            
-            if prayer == "Imsak":
-                await channel.send(file=discord.File("resources/zaki.mp4")) #* about that ... might consider it later
-                
-            if prayer == "Maghrib":
-                maghrib_time = datetime.strptime(time, '%H:%M')
-                ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
-                
-                if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
-                        await channel.send("تم تعبئة الكرشة بنجاح")                       
-                        await channel.send(file=discord.File("resources/zaki.jpg"))                #*Should add 30 diff pics , Each pic for each day , maybe ...
-    else:
+    if not isinstance(channel, discord.TextChannel):
         print(f"❌ Error: Channel {channel} is not a TextChannel!")
+        return
+    
+    for prayer, time in timings.items():
+        try:
+            prayer_time = datetime.strptime(time, '%H:%M').time()
+        except ValueError:
+            print(f"Invalid time format for {prayer}: {time}")
+            continue
+
+        # Check if prayer time matches and it hasn't been sent yet
+        if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
+            if prayer not in sent_prayers:
+                await channel.send(f"@everyone ({prayer}) حان الأن موعد صلاة الـ ")
+                sent_prayers.add(prayer)  # Mark as sent
+
+                #Imsak
+                if prayer == "Imsak":
+                    await channel.send("@everyone 🌙وقت السحور")
+                    await channel.send(file=discord.File("resources/zaki.mp4"))
+
+        # Maghrib (send after 10 minutes)
+        if prayer == "Maghrib":
+            maghrib_time = datetime.strptime(time, '%H:%M')
+            ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
+
+            if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
+                if "Maghrib_10min" not in sent_prayers:
+                    await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
+                    await channel.send(file=discord.File("resources/zaki.jpg"))
+                    sent_prayers.add("Maghrib_10min")  # Mark as sent
+
+    # Reset the sent prayers at midnight
+    if now.hour == 0 and now.minute == 0:
+        sent_prayers.clear()
 
 
 
