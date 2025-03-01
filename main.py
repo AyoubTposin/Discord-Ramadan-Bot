@@ -35,7 +35,7 @@ async def on_ready() ->None:
     if not prayer_time_notification.is_running():
         print("🔄 Starting prayer time loop...")
         prayer_time_notification.start()                   #*Activated : still checking tho ...
-    send_quran.start()
+        send_quran.start()
     
 @bot.event
 async def on_command_error(ctx, error):
@@ -68,7 +68,7 @@ async def prayer_time_notification():
     
     try:
         timings = get_prayer_time()
-        print("📅 Prayer times fetched:", timings)  # Debugging line
+        #print("📅 Prayer times fetched:", timings)  # Debugging line
     except Exception as e:
         print(f"❌Failed to fetch prayer times: {e}")
         return
@@ -82,7 +82,7 @@ async def prayer_time_notification():
     for prayer, time in timings.items():
         try:
             prayer_time = datetime.strptime(time, '%H:%M').time()
-            print(f"⏰ Checking {prayer}: {prayer_time} vs {now}")
+            #print(f"⏰ Checking {prayer}: {prayer_time} vs {now}")
 
         except ValueError:
             print(f"Invalid time format for {prayer}: {time}")
@@ -153,7 +153,8 @@ async def remind(ctx):
     except Exception as e:
         await ctx.send(f"⚠️ Error fetching prayer times: {e}")
         return
-    now = datetime.now()
+    now = (datetime.now() + timedelta(hours=1)).time() # Added 1 hour due to hosting error (UTC +1)
+    now = now.replace(second=0, microsecond=0)
 
     # Extract Maghrib and Fajr times 
     maghrib_time_str = timings.get("Maghrib", None)
