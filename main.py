@@ -154,7 +154,6 @@ async def remind(ctx):
         await ctx.send(f"⚠️ Error fetching prayer times: {e}")
         return
     now = (datetime.now() + timedelta(hours=1)).time() # Added 1 hour due to hosting error (UTC +1)
-    now = now.replace(second=0, microsecond=0)
 
     # Extract Maghrib and Fajr times 
     maghrib_time_str = timings.get("Maghrib", None)
