@@ -1,11 +1,10 @@
-from typing import Final
-
 import settings
 import discord
 from discord import Intents,Client,Message
 from discord.ext import commands, tasks
 from discord import app_commands
 from datetime import datetime, timedelta
+import asyncio
 
 
 from get_prayer_time import get_prayer_time
@@ -23,8 +22,27 @@ intents.message_content= True
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
+async def play_adhan(guild: discord.Guild):
+    voice_channel = None
+    
+    
+    # **Find a voice channel with active members**
+    for channel in guild.voice_channels:
+        if len(channel.members) > 0 and channel.permissions_for(guild.me).connect:
+            voice_channel = channel
+            break
 
+    if voice_channel is None:
+        print(f"❌ no Active members in VC or no channel found on {guild.name}")
+        return
 
+    vc = await voice_channel.connect()
+    vc.play(discord.FFmpegPCMAudio("resources/adhan.mp3"), after=lambda e: print("✅ Adhan finished."))
+
+    while vc.is_playing():
+        await asyncio.sleep(1)
+        
+    await vc.disconnect()
 
 
 #Startup
@@ -92,20 +110,26 @@ async def prayer_time_notification():
         if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
             if prayer not in sent_prayers:
                 print(f"✅ Sending notification for {prayer}!")
+                guild = channel.guild
                 if prayer == "Fajr":
                     await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
-                if prayer == "Duhur":
+                    await play_adhan(guild)
+                if prayer == "Dhuhur":
                     await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
+                    await play_adhan(guild)
                 if prayer == "Asr":
                     await channel.send("@everyone ** 🕌 حان الأن موعد صلاة العصر **")
+                    await play_adhan(guild)
                 if prayer == "Isha":
                     await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
+                    await play_adhan(guild)
                 if prayer == "Imsak":
                     await channel.send("@everyone 🌙وقت السحور")
                     await channel.send(file=discord.File("resources/zaki.mp4"))
         # Maghrib (send after 10 minutes)
                 if prayer == "Maghrib":
                     await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
+                    await play_adhan(guild)
                     maghrib_time = datetime.strptime(time, '%H:%M')
                     ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
 
