@@ -32,14 +32,6 @@ async def on_ready() ->None:
         prayer_time_notification.start()                   
         #send_quran.start()
         await bot.get_channel(1344067206346182668).send("⚠️🛠️ Quran Verses Function Disabled Temporarily -fixing-")
-#*Testing : 
-try:
-    result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True, check=True)
-    print("✅ FFmpeg is installed!\n", result.stdout)
-except FileNotFoundError:
-    print("❌ FFmpeg is NOT installed!")
-except subprocess.CalledProcessError as e:
-    print("⚠️ Error checking FFmpeg:", e)
 
 
 @bot.event
