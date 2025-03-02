@@ -92,25 +92,29 @@ async def prayer_time_notification():
         if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
             if prayer not in sent_prayers:
                 print(f"✅ Sending notification for {prayer}!")
-                await channel.send(f"@everyone 🕌 ({prayer}) حان الأن موعد الصلاة")
-                sent_prayers.add(prayer)  # Mark as sent
-
-                #Imsak
+                if prayer == "Fajr":
+                    await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
+                if prayer == "Duhur":
+                    await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
+                if prayer == "Asr":
+                    await channel.send("@everyone ** 🕌 حان الأن موعد صلاة العصر **")
+                if prayer == "Isha":
+                    await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
                 if prayer == "Imsak":
                     await channel.send("@everyone 🌙وقت السحور")
                     await channel.send(file=discord.File("resources/zaki.mp4"))
-
         # Maghrib (send after 10 minutes)
-        if prayer == "Maghrib":
-            maghrib_time = datetime.strptime(time, '%H:%M')
-            ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
+                if prayer == "Maghrib":
+                    await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
+                    maghrib_time = datetime.strptime(time, '%H:%M')
+                    ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
 
-            if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
-                if "Maghrib_10min" not in sent_prayers:
-                    await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
-                    await channel.send(file=discord.File("resources/zaki.jpg"))
-                    sent_prayers.add("Maghrib_10min")  # Mark as sent
-
+                    if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
+                        if "Maghrib_10min" not in sent_prayers:
+                            await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
+                            await channel.send(file=discord.File("resources/zaki.jpg"))
+                            sent_prayers.add("Maghrib_10min")  # Mark as sent
+                sent_prayers.add(prayer)
     # Reset the sent prayers at midnight
     if now.hour == 0 and now.minute == 0:
         sent_prayers.clear()
