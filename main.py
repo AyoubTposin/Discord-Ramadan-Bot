@@ -31,7 +31,7 @@ async def on_ready() ->None:
         print("🔄 Starting prayer time loop...")
         prayer_time_notification.start()                   
         #send_quran.start()
-        await bot.get_channel(1344067206346182668).send("⚠️🛠️ Quran Version Function Disabled Temporarily -fixing-")
+        await bot.get_channel(1344067206346182668).send("⚠️🛠️ Quran Verses Function Disabled Temporarily -fixing-")
 #*Testing : 
 try:
     result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True, check=True)
