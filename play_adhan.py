@@ -2,7 +2,7 @@ import discord
 import asyncio
 
 async def play_adhan(guild: discord.Guild):
-    file_path = "resources/adhan.mp3"
+    file_path = "resources/adhan.opus"
     voice_channel = None
     
     
@@ -17,14 +17,9 @@ async def play_adhan(guild: discord.Guild):
         return
 
     vc = await voice_channel.connect()
-    ffmpeg_options = {
-        'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-        'options': '-vn'
-    }
-    audio_source = discord.FFmpegPCMAudio(file_path, **ffmpeg_options)
-    if not discord.opus.is_loaded():
-        discord.opus.load_opus("libopus.so")  
-
+    
+    audio_source = discord.FFmpegPCMAudio(file_path)
+    
     if vc.is_playing():
         vc.stop()
         
