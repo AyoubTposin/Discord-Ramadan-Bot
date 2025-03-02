@@ -9,7 +9,7 @@ import asyncio
 
 from get_prayer_time import get_prayer_time
 from get_quran_verse import get_quran_verse
-
+from play_adhan import play_adhan
 
 
 
@@ -21,29 +21,6 @@ intents.message_content= True
 
 
 bot = commands.Bot(command_prefix='/', intents=intents)
-
-async def play_adhan(guild: discord.Guild):
-    voice_channel = None
-    
-    
-    # **Find a voice channel with active members**
-    for channel in guild.voice_channels:
-        if len(channel.members) > 0 and channel.permissions_for(guild.me).connect:
-            voice_channel = channel
-            break
-
-    if voice_channel is None:
-        print(f"❌ no Active members in VC or no channel found on {guild.name}")
-        return
-
-    vc = await voice_channel.connect()
-    vc.play(discord.FFmpegPCMAudio("resources/adhan.mp3"), after=lambda e: print("✅ Adhan finished."))
-
-    while vc.is_playing():
-        await asyncio.sleep(1)
-        
-    await vc.disconnect()
-
 
 #Startup
 @bot.event
