@@ -1,10 +1,10 @@
 import settings
 import discord
-from discord import Intents,Client,Message
+import subprocess
+from discord import Intents
 from discord.ext import commands, tasks
-from discord import app_commands
 from datetime import datetime, timedelta
-import asyncio
+
 
 
 from get_prayer_time import get_prayer_time
@@ -32,6 +32,16 @@ async def on_ready() ->None:
         prayer_time_notification.start()                   #*Activated : still checking tho ...
         send_quran.start()
     
+#*Testing : 
+try:
+    result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True, check=True)
+    print("✅ FFmpeg is installed!\n", result.stdout)
+except FileNotFoundError:
+    print("❌ FFmpeg is NOT installed!")
+except subprocess.CalledProcessError as e:
+    print("⚠️ Error checking FFmpeg:", e)
+
+
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
