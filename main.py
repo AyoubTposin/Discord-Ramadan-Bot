@@ -29,9 +29,9 @@ async def on_ready() ->None:
     await bot.tree.sync()
     if not prayer_time_notification.is_running():
         print("🔄 Starting prayer time loop...")
-        prayer_time_notification.start()                   #*Activated : still checking tho ...
-        send_quran.start()
-    
+        prayer_time_notification.start()                   
+        #send_quran.start()
+        await bot.get_channel(1344067206346182668).send("⚠️🛠️ Quran Version Function Disabled Temporarily -fixing-")
 #*Testing : 
 try:
     result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True, check=True)
@@ -123,7 +123,7 @@ async def prayer_time_notification():
                     if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
                         if "Maghrib_10min" not in sent_prayers:
                             await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
-                            await channel.send(file=discord.File("resources/zaki.jpg"))
+                            await channel.send(file=discord.File("resources/10.jpg"))
                             sent_prayers.add("Maghrib_10min")  # Mark as sent
                 sent_prayers.add(prayer)
     # Reset the sent prayers at midnight
@@ -133,8 +133,9 @@ async def prayer_time_notification():
 
 
 #*Random Quran Verse
+#!Disabled Fixing 
 
-@tasks.loop(hours=4) #todo Currently 4 hours , might change 
+'''@tasks.loop(hours=4) #todo Currently 4 hours , might change 
 async def send_quran():
     channel = bot.get_channel(1344067206346182668) 
 
@@ -151,7 +152,7 @@ async def send_quran():
             description="this is description",
             brief="Say Ramadan Kareem to your fellas")
 async def ramadan(ctx):
-    await ctx.send("Ramadan Kareem! May this blessed month bring you peace and prosperity.")
+    await ctx.send("Ramadan Kareem! May this blessed month bring you peace and prosperity.")'''
 
 
 #*remind command
