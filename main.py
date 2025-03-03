@@ -122,7 +122,10 @@ async def prayer_time_notification():
     if now.hour == 0 and now.minute == 0:
         sent_prayers.clear()
 
-
+@bot.command()
+async def test_adhan(ctx):
+    await play_adhan(ctx.guild)
+       
 
 #*Random Quran Verse
 #!Disabled Fixing 

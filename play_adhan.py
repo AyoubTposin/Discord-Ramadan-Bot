@@ -18,7 +18,10 @@ async def play_adhan(guild: discord.Guild):
 
     vc = await voice_channel.connect()
     
-    audio_source = discord.FFmpegPCMAudio(file_path)
+    if not discord.opus.is_loaded():
+        discord.opus.load_opus("libopus.so")
+    
+    audio_source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_path))
     
     if vc.is_playing():
         vc.stop()
@@ -30,3 +33,4 @@ async def play_adhan(guild: discord.Guild):
         await asyncio.sleep(1)
         
     await vc.disconnect()
+    print("✅ Adhan finished, bot disconnected.")
