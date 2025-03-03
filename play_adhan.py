@@ -23,7 +23,7 @@ async def play_adhan(guild: discord.Guild):
         print("🎵 Streaming Adhan...")
 
         while vc.is_playing():
-            await asyncio.sleep(1)
+            await asyncio.sleepsleep(.1)
 
     except Exception as e:
         print(f"❌ Error streaming Adhan: {e}")

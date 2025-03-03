@@ -26,6 +26,7 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 @bot.event
 async def on_ready() ->None:
     print(f'{bot.user} is now running!')
+    print(f"Sent prayer List :\n {sent_prayers} ")
     await bot.tree.sync()
     if not prayer_time_notification.is_running():
         print("🔄 Starting prayer time loop...")
@@ -89,26 +90,25 @@ async def prayer_time_notification():
         if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
             if prayer not in sent_prayers:
                 print(f"✅ Sending notification for {prayer}!")
-                guild = channel.guild
                 if prayer == "Fajr":
                     await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
-                    await play_adhan(guild)
+                    
                 if prayer == "Dhuhur":
                     await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
-                    await play_adhan(guild)
+                    
                 if prayer == "Asr":
                     await channel.send("@everyone ** 🕌 حان الأن موعد صلاة العصر **")
-                    await play_adhan(guild)
+                    
                 if prayer == "Isha":
                     await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
-                    await play_adhan(guild)
+                    
                 if prayer == "Imsak":
                     await channel.send("@everyone 🌙وقت السحور")
                     await channel.send(file=discord.File("resources/zaki.mp4"))
         # Maghrib (send after 10 minutes)
                 if prayer == "Maghrib":
                     await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
-                    await play_adhan(guild)
+                    
                     maghrib_time = datetime.strptime(time, '%H:%M')
                     ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
 
@@ -122,9 +122,6 @@ async def prayer_time_notification():
     if now.hour == 0 and now.minute == 0:
         sent_prayers.clear()
 
-@bot.command()
-async def test_adhan(ctx):
-    await play_adhan(ctx.guild)
        
 
 #*Random Quran Verse
