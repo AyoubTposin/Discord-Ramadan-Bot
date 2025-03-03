@@ -2,11 +2,10 @@ import discord
 import asyncio
 
 async def play_adhan(guild: discord.Guild):
-    file_path = "resources/adhan.opus"
+    adhan_url = "https://www.islamcan.com/audio/adhan/azan1.mp3"
     voice_channel = None
     
     
-    # **Find a voice channel with active members**
     for channel in guild.voice_channels:
         if len(channel.members) > 0 and channel.permissions_for(guild.me).connect:
             voice_channel = channel
@@ -18,19 +17,16 @@ async def play_adhan(guild: discord.Guild):
 
     vc = await voice_channel.connect()
     
-    if not discord.opus.is_loaded():
-        discord.opus.load_opus("libopus.so")
-    
-    audio_source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(file_path))
-    
-    if vc.is_playing():
-        vc.stop()
-        
-    vc.play(audio_source)
-    print("Adhan is playing ...")
+    try:
+        audio_source = discord.FFmpegPCMAudio(adhan_url)
+        vc.play(audio_source)
+        print("🎵 Streaming Adhan...")
 
-    while vc.is_playing():
-        await asyncio.sleep(1)
-        
+        while vc.is_playing():
+            await asyncio.sleep(1)
+
+    except Exception as e:
+        print(f"❌ Error streaming Adhan: {e}")
+
+    print("✅ Adhan finished, disconnecting...")
     await vc.disconnect()
-    print("✅ Adhan finished, bot disconnected.")
