@@ -113,12 +113,11 @@ async def prayer_time_notification():
                     ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
 
                     if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
-                        if "Maghrib_10min" not in sent_prayers:
+                        
                             await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
                             await channel.send(file=discord.File("resources/10.jpg"))
-                            sent_prayers.add("Maghrib_10min")  # Mark as sent
+                            
                 sent_prayers.add(prayer)
-    # Reset the sent prayers at midnight
     if now.hour == 0 and now.minute == 0:
         sent_prayers.clear()
 
