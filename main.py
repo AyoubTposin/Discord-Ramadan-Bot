@@ -57,8 +57,9 @@ async def ping(ctx):
 
 @bot.command(name="test_alarm")
 async def test_alarm(ctx):
-    await ctx.send("testing...")
-    await ctx.send(discord.file("resources/dog.mp4"))
+    channel = ctx.channel
+    await channel.send(file=discord.File("resources/dog.mp4"))
+    
 
 
     
