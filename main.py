@@ -55,13 +55,6 @@ async def on_command_error(ctx, error):
 async def ping(ctx):
     await ctx.send("pong")
 
-@bot.command(name="test_alarm")
-async def test_alarm(ctx):
-    channel = ctx.channel
-    await channel.send(file=discord.File("resources/dog.mp4"))
-    
-
-
     
 #todo : Keep underwatch , might fail 
 
