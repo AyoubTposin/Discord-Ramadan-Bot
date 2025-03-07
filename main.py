@@ -55,9 +55,10 @@ async def on_command_error(ctx, error):
 async def ping(ctx):
     await ctx.send("pong")
 
-@bot.command
+@bot.command(name="test_alarm")
 async def test_alarm(ctx):
     channel= bot.get_channel(1344067206346182668)
+    await ctx.send("testing...")
     await channel.send(file="resources/dog.mp4")
 
     
