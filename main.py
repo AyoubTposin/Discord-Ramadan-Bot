@@ -55,6 +55,12 @@ async def on_command_error(ctx, error):
 async def ping(ctx):
     await ctx.send("pong")
 
+@bot.command
+async def test_alarm(ctx):
+    channel= bot.get_channel(1344067206346182668)
+    await channel.send(file="resources/dog.mp4")
+
+    
 #todo : Keep underwatch , might fail 
 
 sent_prayers = set()
@@ -105,6 +111,7 @@ async def prayer_time_notification():
                 if prayer == "Imsak":
                     await channel.send("@everyone 🌙وقت السحور")
                     await channel.send(file=discord.File("resources/zaki.mp4"))
+                    await channel.send(file=discord.File("resources/dog.mp4"))
         # Maghrib (send after 10 minutes)
                 if prayer == "Maghrib":
                     await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
