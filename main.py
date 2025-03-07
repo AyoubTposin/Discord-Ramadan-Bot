@@ -59,7 +59,7 @@ async def ping(ctx):
 async def test_alarm(ctx):
     channel= bot.get_channel(1344067206346182668)
     await ctx.send("testing...")
-    await channel.send(file="resources/dog.mp4")
+    await channel.send(file=discord.file("resources/dog.mp4"))
 
     
 #todo : Keep underwatch , might fail 
