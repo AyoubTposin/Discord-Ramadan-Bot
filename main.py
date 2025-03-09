@@ -26,7 +26,6 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 @bot.event
 async def on_ready() ->None:
     print(f'{bot.user} is now running!')
-    print(f"Sent prayer List :\n {sent_prayers} ")
     await bot.tree.sync()
     if not prayer_time_notification.is_running():
         print("🔄 Starting prayer time loop...")
@@ -58,7 +57,7 @@ async def ping(ctx):
     
 #todo : Keep underwatch , might fail 
 
-sent_prayers = set()
+
 
 @tasks.loop(minutes=1)  
 async def prayer_time_notification():
@@ -89,39 +88,39 @@ async def prayer_time_notification():
 
         # Check if prayer time matches and it hasn't been sent yet
         if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
-            if prayer not in sent_prayers:
-                print(f"✅ Sending notification for {prayer}!")
-                if prayer == "Fajr":
-                    await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
+            print(f"✅ Sending notification for {prayer}!")
+            if prayer == "Fajr":
+                await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
                     
-                if prayer == "Dhuhur":
-                    await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
+            if prayer == "Dhuhur":
+                await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
                     
-                if prayer == "Asr":
-                    await channel.send("@everyone ** 🕌 حان الأن موعد صلاة العصر **")
+            if prayer == "Asr":
+                await channel.send("@everyone ** 🕌 حان الأن موعد صلاة العصر **")
                     
-                if prayer == "Isha":
-                    await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
+            if prayer == "Isha":
+                await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
                     
-                if prayer == "Imsak":
-                    await channel.send("@everyone 🌙وقت السحور")
-                    await channel.send(file=discord.File("resources/zaki.mp4"))
-                    await channel.send(file=discord.File("resources/dog.mp4"))
+            if prayer == "Imsak":
+                await channel.send("@everyone 🌙وقت السحور")
+                await channel.send(file=discord.File("resources/zaki.mp4"))
+                await channel.send(file=discord.File("resources/dog.mp4"))
         # Maghrib (send after 10 minutes)
-                if prayer == "Maghrib":
-                    await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
+            if prayer == "Maghrib":
+                await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
                     
-                    maghrib_time = datetime.strptime(time, '%H:%M')
-                    ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
+                maghrib_time = datetime.strptime(time, '%H:%M')
+                ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
 
-                    if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
+                if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
                         
-                            await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
-                            await channel.send(file=discord.File("resources/10.jpg"))
+                    await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
+                    await channel.send(file=discord.File("resources/10.jpg")
+                )    
                             
-                sent_prayers.add(prayer)
-    if now.hour == 0 and now.minute == 0:
-        sent_prayers.clear()
+                
+    
+        
 
        
 
