@@ -107,15 +107,9 @@ async def prayer_time_notification():
                 await channel.send(file=discord.File("resources/dog.mp4"))
         # Maghrib (send after 10 minutes)
             if prayer == "Maghrib":
-                await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")
-                    
-                maghrib_time = datetime.strptime(time, '%H:%M')
-                ten_minutes_after = (maghrib_time + timedelta(minutes=10)).time()
-
-                if now.hour == ten_minutes_after.hour and now.minute == ten_minutes_after.minute:
-                        
-                    await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
-                    await channel.send(file=discord.File("resources/10.jpg")
+                await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")       
+                await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
+                await channel.send(file=discord.File("resources/10.jpg")
                 )    
                             
                 
