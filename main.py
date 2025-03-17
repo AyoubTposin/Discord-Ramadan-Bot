@@ -86,13 +86,13 @@ async def prayer_time_notification():
             print(f"Invalid time format for {prayer}: {time}")
             continue
 
-        # Check if prayer time matches and it hasn't been sent yet
+        
         if now.hour == prayer_time.hour and now.minute == prayer_time.minute:
             print(f"✅ Sending notification for {prayer}!")
             if prayer == "Fajr":
                 await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
                     
-            if prayer == "Dhuhur":
+            if prayer == "Dhuhr":
                 await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
                     
             if prayer == "Asr":
@@ -100,11 +100,11 @@ async def prayer_time_notification():
                     
             if prayer == "Isha":
                 await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
+                await channel.send(file=discord.File("resources/dog.mp4"))
                     
             if prayer == "Imsak":
                 await channel.send("@everyone 🌙وقت السحور")
                 await channel.send(file=discord.File("resources/zaki.mp4"))
-                await channel.send(file=discord.File("resources/dog.mp4"))
         # Maghrib (send after 10 minutes)
             if prayer == "Maghrib":
                 await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")       
