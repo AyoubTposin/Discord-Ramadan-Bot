@@ -93,7 +93,7 @@ async def prayer_time_notification():
                 await channel.send("@everyone **✨حان الأن موعد صلاة الفجر**")
                     
             if prayer == "Dhuhr":
-                await channel.send("@everyone **☀️ حان ألأن موعد صلاة الضهر **")
+                await channel.send("@everyone **☀️ حان ألأن موعد صلاة الظهر **")
                     
             if prayer == "Asr":
                 await channel.send("@everyone ** 🕌 حان الأن موعد صلاة العصر **")
