@@ -1,6 +1,5 @@
 import settings
 import discord
-import subprocess
 from discord import Intents
 from discord.ext import commands, tasks
 from datetime import datetime, timedelta
@@ -8,8 +7,7 @@ from datetime import datetime, timedelta
 
 
 from get_prayer_time import get_prayer_time
-from get_quran_verse import get_quran_verse
-from play_adhan import play_adhan
+
 
 
 
@@ -32,6 +30,7 @@ async def on_ready() ->None:
         prayer_time_notification.start()                   
         #send_quran.start()
         await bot.get_channel(1344067206346182668).send("⚠️🛠️ Quran Verses Function Disabled Temporarily -fixing-")
+        await bot.get_channel(1344067206346182668).send("***اللهم بلغنا ليلة القدر***")
 
 
 @bot.event
@@ -100,12 +99,15 @@ async def prayer_time_notification():
                     
             if prayer == "Isha":
                 await channel.send("@everyone **🌙 حان الأن موعد صلاة العشاء **")
-                await channel.send(file=discord.File("resources/dog.mp4"))
+                
+            
+            if prayer == "Lastthird":
+                await channel.send("#@everyone وقت اخر ثلث من الليل . قال رسول الله صلى الله عليه وسلم :من خاف أن لا يقوم من آخر الليل فليوتر أوله,ومن طمع أن يقوم آخر الليل فليوتر آخر الليل,إن صلاة آخر الليل مشهودة وذلك أفضل")
                     
             if prayer == "Imsak":
                 await channel.send("@everyone 🌙وقت السحور")
                 await channel.send(file=discord.File("resources/zaki.mp4"))
-        # Maghrib (send after 10 minutes)
+        
             if prayer == "Maghrib":
                 await channel.send("@everyone **🌙 حان الأن موعد صلاة المغرب **")       
                 await channel.send("😝✅ تم تعبئة الكرشة بنجاح")
